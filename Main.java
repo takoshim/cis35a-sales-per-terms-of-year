@@ -7,54 +7,59 @@ public class Main {
     private static final int NUMBER_OF_TERMS_PER_YEAR = 4;
 
     public static void main(String[] args) {
-        String[] userNamesOfDivision = getNamesOfDivision();
-        printDivision (userNamesOfDivision);
-        double[][] userQuarterlySalesPerDivision = getQuarterlySalesPerDivision (userNamesOfDivision);
-        double[][] userDiffsBetweenTerms = calcDiffBetweenTerms(userQuarterlySalesPerDivision);
-        printHeaderLine();
-        printContents (userNamesOfDivision, userQuarterlySalesPerDivision, userDiffsBetweenTerms);
+        String[] userDivisions = new String[NUMBER_OF_DIVISION];
+        getNamesInTime(userDivisions, NUMBER_OF_DIVISION);
+        printNames(userDivisions);
+//        double[][] userQuarterlySalesPerDivision = getQuarterlySalesPerDivision(userNamesOfDivision);
+//        double[][] userDiffsBetweenTerms = calcDiffBetweenTerms(userQuarterlySalesPerDivision);
+//        printHeaderLine();
+//        printContents(userNamesOfDivision, userQuarterlySalesPerDivision, userDiffsBetweenTerms);
     }
 
 
     /**
-     *
-     * @return
+     * This void function takes two parameters.
+     * And prompts user to enter names for times specified by the second arg.
+     * @param array
+     * @param time
      */
-    public static String[] getNamesOfDivision() {
-        String[] namesOfDivision = new String[NUMBER_OF_DIVISION];
+    public static void getNamesInTime(String[] array, int time) {
 
         // Prompts user to enter names of each division of company
         Scanner in = new Scanner(System.in);
-        for (int i = 0; i < NUMBER_OF_DIVISION; i++) {
-            System.out.println("Name of division [" + (i + 1) + "]? ");
-            namesOfDivision[i] = in.nextLine();
+        for (int i = 0; i < time; i++) {
+            System.out.printf("Type name %d: ", i + 1);
+            array[i] = in.nextLine();
         }
-        return namesOfDivision;
     }
 
     /**
-     *
-     * @param namesOfDivision
+     * This void function prints Strings passed by arg.
+     * Each value in the array of String passed are printed with preceding number of line.
+     * @param names
      */
-    public static void printDivision(String[] namesOfDivision) {
-        // Prints division names
-        for (int i = 0; i < NUMBER_OF_DIVISION; i++) {
-            System.out.printf("Division %2d: %12s\n", i + 1, namesOfDivision[i]);
+    public static void printNames(String[] names) {
+        for (int i = 0; i < names.length; i++) {
+            System.out.printf("%d: %20s\n", i +1, names[i]);
         }
     }
 
 
     /**
-     *
+     * This function prompts user to enter quarterly sales per division.
+     * Number of terms is modifiable by static variable NUMBER_OF_TERMS_PER_YEAR.
+     * Two-dimension array of double returned by this function.
+     * The size of the array calculated is multiplication of number of division by number of terms.
+     * To set it to be quarter system, set the variable to 4.
      * @param namesOfDivision
-     * @return
+     * @retur quarterlySalesPerDivision (double[][])
      */
     public static double[][] getQuarterlySalesPerDivision(String[] namesOfDivision) {
         // Define necessary variables
-        double[][] quarterlySalesPerDivision = new double[NUMBER_OF_DIVISION][NUMBER_OF_TERMS_PER_YEAR];
+        double[][] quarterlySalesPerDivision = new double[namesOfDivision.length][NUMBER_OF_TERMS_PER_YEAR];
 
         // Prompts user to enter sales one division by another
-        for (int div=0; div<NUMBER_OF_DIVISION; div++) {
+        for (int div=0; div< namesOfDivision.length; div++) {
 
             // First prints the name of the division
             Scanner in = new Scanner(System.in);
@@ -71,6 +76,7 @@ public class Main {
 
 
     /**
+     * This function returns differences between sales of consecutive terms of divisions.
      *
      * @param quarterlySalesPerDivision
      * @return
