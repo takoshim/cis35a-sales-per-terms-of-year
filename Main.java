@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
     private static final int NUMBER_OF_DIVISION = 2;
-    private static final int NUMBER_OF_TERMS_PER_YEAR = 2;
+    private static final int NUMBER_OF_TERMS_PER_YEAR = 4;
 
     public static void main(String[] args) {
 
@@ -26,7 +26,7 @@ public class Main {
         for (int div=0; div<NUMBER_OF_DIVISION; div++) {
 
             // First prints the name of the division
-            System.out.printf("Division %12s\n",namesOfDivision[div]);
+            System.out.printf("Division %20s\n",namesOfDivision[div]);
 
             // Then prompts user to enter sales for each sales term
             for (int term=0; term<NUMBER_OF_TERMS_PER_YEAR; term++) {
@@ -36,28 +36,52 @@ public class Main {
         }
 
         // Calculates the differences between quarters
+        double[][] diffsBetweenTerms = new double[NUMBER_OF_DIVISION][NUMBER_OF_TERMS_PER_YEAR - 1];
+
+        // Loop for each division
+        for (int division=0; division<NUMBER_OF_DIVISION; division++) {
+            for (int diff = 0; diff < NUMBER_OF_TERMS_PER_YEAR - 1; diff++) {
+                diffsBetweenTerms[division][diff] = quarterlySalesPerDivision[division][diff + 1] - quarterlySalesPerDivision[division][diff];
+            }
+        }
 
 
         // Loop for printing header line
-        System.out.printf("%-18s", "Division");
-        for (int term=0; term<NUMBER_OF_TERMS_PER_YEAR; term++) {
-            String termNum = "Term".concat(Integer.toString(term +1));
-            System.out.printf("%-18s", termNum);
+        // Print "Division" at 1st column
+        System.out.printf("%20s%16s", "Division", "Term1");
+
+        // For Term2 and over
+        for (int term=1; term<NUMBER_OF_TERMS_PER_YEAR; term++) {
+
+            // Construct colum header String
+            String termNum = "Term";
+            termNum = termNum.concat(Integer.toString(term +1));
+
+            System.out.printf("%16s", termNum);
+            System.out.printf("%14s", "(+/-)" );
         }
         System.out.printf("\n");
 
 
-        // Loop for printing
+
+
+        // Loop for printing the contents
         for (int div=0; div<NUMBER_OF_DIVISION; div++) {
 
-            // Prints name of the division
-            System.out.printf("%18s", namesOfDivision[div]);
+            // Prints division name
+            System.out.printf("%20s", namesOfDivision[div]);
 
-            // Inner loop for quarterly sales for a division
-            for (int term=0; term<NUMBER_OF_TERMS_PER_YEAR; term++) {
-                System.out.printf("%18.2f", quarterlySalesPerDivision[div][term]);
+            // Prints the first term
+            System.out.printf("%,16.2f", quarterlySalesPerDivision[div][0]);
+
+            // Prints the second term and over
+            for (int term=1; term<NUMBER_OF_TERMS_PER_YEAR; term++) {
+                System.out.printf("%,16.2f", quarterlySalesPerDivision[div][term]);
+                System.out.printf("(%+,14.2f)", diffsBetweenTerms[div][term -1]);
             }
             System.out.printf("\n");
         }
     }
 }
+
+
