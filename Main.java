@@ -1,11 +1,18 @@
 import java.util.Scanner;
 
 public class Main {
+
+    // Defines static variables
     private static final int NUMBER_OF_DIVISION = 2;
     private static final int NUMBER_OF_TERMS_PER_YEAR = 4;
 
     public static void main(String[] args) {
-
+        String[] userNamesOfDivision = getNamesOfDivision();
+        printDivision (userNamesOfDivision);
+        double[][] userQuarterlySalesPerDivision = getQuarterlySalesPerDivision (userNamesOfDivision);
+        double[][] userDiffsBetweenTerms = calcDiffBetweenTerms(userQuarterlySalesPerDivision);
+        printHeaderLine();
+        printContents (userNamesOfDivision, userQuarterlySalesPerDivision, userDiffsBetweenTerms);
     }
 
 
