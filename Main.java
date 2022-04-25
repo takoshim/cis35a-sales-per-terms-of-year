@@ -7,15 +7,22 @@ public class Main {
     private static final int NUMBER_OF_TERMS_PER_YEAR = 4;
 
     public static void main(String[] args) {
+
         String[] userDivisions = new String[NUMBER_OF_DIVISION];
-        getNamesInTime(userDivisions, NUMBER_OF_DIVISION);
-        printNames(userDivisions);
+        getNamesInTime( userDivisions, NUMBER_OF_DIVISION );
+        printNames( userDivisions );
+
+        double[] dev1Sales = new double[NUMBER_OF_TERMS_PER_YEAR];
+        getSalesInTerm( dev1Sales, NUMBER_OF_TERMS_PER_YEAR);
+
+        double[] dev2Sales = new double[NUMBER_OF_TERMS_PER_YEAR];
+        getSalesInTerm( dev2Sales, NUMBER_OF_TERMS_PER_YEAR);
+
 //        double[][] userQuarterlySalesPerDivision = getQuarterlySalesPerDivision(userNamesOfDivision);
 //        double[][] userDiffsBetweenTerms = calcDiffBetweenTerms(userQuarterlySalesPerDivision);
 //        printHeaderLine();
 //        printContents(userNamesOfDivision, userQuarterlySalesPerDivision, userDiffsBetweenTerms);
     }
-
 
     /**
      * This void function takes two parameters.
@@ -44,43 +51,24 @@ public class Main {
         }
     }
 
-
     /**
-     * This function prompts user to enter quarterly sales per division.
-     * Number of terms is modifiable by static variable NUMBER_OF_TERMS_PER_YEAR.
-     * Two-dimension array of double returned by this function.
-     * The size of the array calculated is multiplication of number of division by number of terms.
-     * To set it to be quarter system, set the variable to 4.
-     * @param namesOfDivision
-     * @retur quarterlySalesPerDivision (double[][])
+     * This void function takes two parameters.
+     * And prompts user to enter sales for times of terms specified by the second arg.
+     * @param sales
+     * @param terms
      */
-    public static double[][] getQuarterlySalesPerDivision(String[] namesOfDivision) {
-        // Define necessary variables
-        double[][] quarterlySalesPerDivision = new double[namesOfDivision.length][NUMBER_OF_TERMS_PER_YEAR];
+    public static void getSalesInTerm (double[] sales, int terms) {
 
-        // Prompts user to enter sales one division by another
-        for (int div=0; div< namesOfDivision.length; div++) {
+        // Prompts user to enter sales for times specified by second arg
+        Scanner in = new Scanner(System.in);
 
-            // First prints the name of the division
-            Scanner in = new Scanner(System.in);
-            System.out.printf("Division %20s\n",namesOfDivision[div]);
-
-            // Then prompts user to enter sales for each sales term
-            for (int term=0; term<NUMBER_OF_TERMS_PER_YEAR; term++) {
-                System.out.print("Term " + (term+1) + "?\t");
-                quarterlySalesPerDivision[div][term] = in.nextDouble();
-            }
+        for (int i=0; i< terms; i++) {
+            System.out.printf("Sales for Term %d?\n", i +1);
+            sales[i] = in.nextDouble();
         }
-        return quarterlySalesPerDivision;
     }
 
 
-    /**
-     * This function returns differences between sales of consecutive terms of divisions.
-     *
-     * @param quarterlySalesPerDivision
-     * @return
-     */
     public static double[][] calcDiffBetweenTerms(double[][] quarterlySalesPerDivision){
         // Calculates the differences between quarters
         double[][] diffsBetweenTerms = new double[NUMBER_OF_DIVISION][NUMBER_OF_TERMS_PER_YEAR - 1];
