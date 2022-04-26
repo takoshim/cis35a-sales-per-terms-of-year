@@ -18,7 +18,20 @@ public class Main {
         double[] dev2Sales = new double[NUMBER_OF_TERMS_PER_YEAR];
         getSalesInTerm( dev2Sales, NUMBER_OF_TERMS_PER_YEAR);
 
-//        double[][] userQuarterlySalesPerDivision = getQuarterlySalesPerDivision(userNamesOfDivision);
+        double[] dev1SalesDiffsBetweenTerms = calculateDiffsBetweenTerms(dev1Sales);
+        double[] dev2SalesDiffsBetweenTerms = calculateDiffsBetweenTerms(dev2Sales);
+
+        double companySalesPerTerm[] = toTotalSalesPerTerm( dev1Sales, dev2Sales );
+        for (int i=0; i<4; i++) {
+            System.out.println(companySalesPerTerm[i]);
+        }
+
+        double[] companySalesDiffsBetweenTerms = calculateDiffsBetweenTerms(companySalesPerTerm);
+        System.out.println("\n");
+        for (int i=0; i<3; i++) {
+            System.out.println(companySalesDiffsBetweenTerms[i]);
+        }
+
 //        double[][] userDiffsBetweenTerms = calcDiffBetweenTerms(userQuarterlySalesPerDivision);
 //        printHeaderLine();
 //        printContents(userNamesOfDivision, userQuarterlySalesPerDivision, userDiffsBetweenTerms);
@@ -68,23 +81,34 @@ public class Main {
         }
     }
 
+    /**
+     * This function return differences (changes) of sales between each terms.
+     * Returned data consists of array of doulbe type size of the arg minus one.
+     * Ex: if passed sales data are for total of 4 terms, returned array will consist of 3 elements.
+     * Respectively represents: 1st data for diff between term2 and term1,
+     * 2nd data for diff between term3 and term2, 3rd data for diff between term4 and term3.
+     * @param sales
+     * @return
+     */
+    public static double[] calculateDiffsBetweenTerms(double[] sales){
 
-    public static double[][] calcDiffBetweenTerms(double[][] quarterlySalesPerDivision){
-        // Calculates the differences between quarters
-        double[][] diffsBetweenTerms = new double[NUMBER_OF_DIVISION][NUMBER_OF_TERMS_PER_YEAR - 1];
-
-        // Loop for each division
-        for (int division = 0; division < NUMBER_OF_DIVISION; division++) {
-            for (int diff = 0; diff < NUMBER_OF_TERMS_PER_YEAR - 1; diff++) {
-                diffsBetweenTerms[division][diff] = quarterlySalesPerDivision[division][diff + 1] - quarterlySalesPerDivision[division][diff];
-            }
+        double[] diffsAmongTerms = new double[sales.length -1];
+        for (int i=0; i < sales.length -1; i++) {
+            diffsAmongTerms[i] = sales[i +1] - sales[i];
         }
-        return diffsBetweenTerms;
+        return diffsAmongTerms;
     }
 
-    /**
-     *
-     */
+    public static double[] toTotalSalesPerTerm(double[] sales1, double[] sales2) {
+        // Checks if the sizes of the passed arrays are the same
+
+        // Assume the sizes of all the passed arrays are the same
+        double[] totalSalesPerTerm = new double[sales1.length];
+        for (int i=0; i<sales1.length; i++) {
+            totalSalesPerTerm[i] = sales1[i] + sales2[i];
+        }
+        return totalSalesPerTerm;
+    }
     public static void printHeaderLine() {
         // Loop for printing header line
         // Print "Division" at 1st column
