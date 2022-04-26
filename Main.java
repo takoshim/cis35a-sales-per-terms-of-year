@@ -46,7 +46,7 @@ public class Main {
 //            System.out.println("Average of Term " + i + ": " + averagesPerTerm[i]);
 //        }
 
-        String[] divisionsHighestSalesPerTerm = getNamesWithHighestSale(salesData);
+        int[] highestSalesPerTerm = getNamesWithHighestSale(salesData);
     }
     /**
      * This function construct sales data for provided number of divisions and terms.
@@ -109,23 +109,25 @@ public class Main {
      */
     public static double[] calculateTotalsPerTerm(double[][] salesData) {
 
+        // Determines the numbers of divisions and terms
         int numberOfDivisions = salesData.length;
         int numberOfTerms = salesData[numberOfDivisions].length;
 
-        double[] totalsPerTerms = new double[numberOfTerms];
+        // Define returned variable
+        double[] totalsPerTerm = new double[numberOfTerms];
 
         // Outer loop for each term
         for (int term=0; term < numberOfTerms; term++) {
 
-            // Loop through division to sum up
+            // Loop through divisions to sum up
             double totalOfTerm = 0;
             for (int div=0; div < numberOfDivisions -1; div++) {
                 totalOfTerm += salesData[div][term];
             }
             // Store total for this term
-            totalsPerTerms[term] = totalOfTerm;
+            totalsPerTerm[term] = totalOfTerm;
         }
-        return totalsPerTerms;
+        return totalsPerTerm;
     }
 
     /**
@@ -136,20 +138,52 @@ public class Main {
      */
     public static double[] calculateAveragesOfTerm(double[][] salesData) {
 
+        // Determines the numbers of divisions and terms
         int numberOfDivisions = salesData.length;
         int numberOfTerms = salesData[numberOfDivisions].length;
 
+        // Calls calculateTotalsPerTerm to get totals
         double[] totalsPerTerm = calculateTotalsPerTerm(salesData);
+
+        // Define returned variable
         double[] averagesOfTerm = new double[numberOfTerms];
 
+        // Loop through all terms
         for (int term=0; term<numberOfTerms; term++) {
             averagesOfTerm[term] = totalsPerTerm[term] / numberOfDivisions -1;
         }
         return averagesOfTerm;
     }
 
-    public static String[] getNamesWithHighestSale(double[][] salesData) {
+    /**
+     * This function returns array of int that represents the highest sales division
+     * for each term.
+     * @param salesData
+     * @return
+     */
+    public static int[] getNamesWithHighestSale(double[][] salesData) {
 
+        // Determines the numbers of divisions and terms
+        int numberOfDivisions = salesData.length;
+        int numberOfTerms = salesData[numberOfDivisions].length;
+
+        // Define returned variable
+        int[] divisions = new int[numberOfTerms];
+
+        // Outer loop goes through terms
+        for (int term=0; term<numberOfTerms; term++) {
+
+            // Inner loop goes through divisions to find the largest
+            int highest =0;
+            for (int div=0; div<numberOfDivisions; div++) {
+                if (salesData[div][term] > salesData[0][term]) {
+                    highest = div;
+                }
+            }
+            // Stores the index of the highest for this term
+            divisions[term] = highest;
+        }
+        return divisions;
     }
 
 
