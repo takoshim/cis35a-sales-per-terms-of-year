@@ -8,29 +8,66 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // Collect divisions' names
         String[] namesOfDivisions = new String[NUMBER_OF_DIVISION];
         getNamesInTime( namesOfDivisions, NUMBER_OF_DIVISION );
+        // Prints divisions' names
         printNames( namesOfDivisions );
 
-        // double[] salesOfDev1 = new double[NUMBER_OF_TERMS_PER_YEAR];
-        // getSalesInTerm( salesOfDev1, NUMBER_OF_TERMS_PER_YEAR);
-        // double[] salesOfDev2 = new double[NUMBER_OF_TERMS_PER_YEAR];
-        // getSalesInTerm( salesOfDev2, NUMBER_OF_TERMS_PER_YEAR);
-
+        // Constructs sales data
         double[][] salesData = constructSalesData(namesOfDivisions, NUMBER_OF_TERMS_PER_YEAR);
-
+        // Prints sales data
         for(int i=0; i<NUMBER_OF_DIVISION; i++) {
             for (int j=0; j<NUMBER_OF_TERMS_PER_YEAR; j++) {
                 System.out.println("Division " + i + " Term" + j + ": " + salesData[i][j]);
             }
         }
 
-    }
+        // Calculates the differences between terms for each division
+        double[][] diffsPerDivision = new double[NUMBER_OF_DIVISION][NUMBER_OF_TERMS_PER_YEAR -1];
+        for (int div =0; div<NUMBER_OF_DIVISION; div++) {
+            diffsPerDivision[div] = calculateDiffsBetweenTerms(salesData[div]);
+        }
+        // Calculates the differences between terms for company
+        double[] totalForCompany = calculateTotalThroughDivs(salesData);
+        double[] diffsForCompany = calculateDiffsBetweenTerms(totalForCompany);
 
+        // Prints the differences
+        System.out.println("\n");
+        for (int i=0; i<NUMBER_OF_TERMS_PER_YEAR -1; i++) {
+            for (int j=0; j<NUMBER_OF_DIVISION; j++) {
+                System.out.println("Division " + j + " Term " + (i+1) + "compared to the previous: " + diffsPerDivision[j][i]);
+            }
+            System.out.println("For the whole company, Term " + (i+1) + "compared to the previous: " + diffsForCompany[i]);
+        }
+
+
+    }
 
 
 //        printHeaderLine()
 //        printContents(userNamesOfDivision, userQuarterlySalesPerDivision, userDiffsBetweenTerms);
+
+
+    /**
+     * This function construct sales data for provided number of divisions and terms.
+     * By prompting user to input sales data for specified number of term,
+     * this function populate sales data for one division.
+     * @param divisions
+     * @param terms
+     * @return
+     */
+    public static double[][] constructSalesData(String[] divisions, int terms) {
+        Scanner in = new Scanner(System.in);
+        double[][] salesData = new double[divisions.length][terms];
+        for (int div=0; div<divisions.length; div++) {
+            for (int term=0; term<terms; term++) {
+                System.out.printf("Division %d sales for Term %d? ", div, term);
+                salesData[div][term] = in.nextDouble();
+            }
+        }
+        return salesData;
+    }
 
 
     /**
@@ -60,25 +97,10 @@ public class Main {
         }
     }
 
-    /**
-     * This void function takes two parameters.
-     * And prompts user to enter sales for times of terms specified by the second arg.
-     * @param sales
-     * @param terms
-     */
-    public static void getSalesInTerm (double[] sales, int terms) {
-
-        // Prompts user to enter sales for times specified by second arg
-        Scanner in = new Scanner(System.in);
-
-        for (int i=0; i< terms; i++) {
-            sales[i] = in.nextDouble();
-        }
-    }
 
     /**
-     * This function return differences (changes) of sales between each terms.
-     * Returned data consists of array of doulbe type size of the arg minus one.
+     * This function return differences (changes) of sales between each term.
+     * Returned data consists of array of double type size of the arg minus one.
      * Ex: if passed sales data are for total of 4 terms, returned array will consist of 3 elements.
      * Respectively represents: 1st data for diff between term2 and term1,
      * 2nd data for diff between term3 and term2, 3rd data for diff between term4 and term3.
@@ -95,33 +117,29 @@ public class Main {
     }
 
     /**
-     * This function returns total sales for each term.
-     * At this moment, implementation is done for 2 parameters version and 6 parameters.
-     * @param sales1
-     * @param sales2
+     * This function returns total sum of sales per terms.
+     * @param salesData
      * @return
      */
-    public static double[] toTotalSalesPerTerm(double[] sales1, double[] sales2) {
-        // Checks if the sizes of the passed arrays are the same
+    public static double[] calculateTotalThroughDivs(double[][] salesData) {
 
-        // Assume the sizes of all the passed arrays are the same
-        double[] totalSalesPerTerm = new double[sales1.length];
-        for (int i=0; i<sales1.length; i++) {
-            totalSalesPerTerm[i] = sales1[i] + sales2[i];
-        }
-        return totalSalesPerTerm;
-    }
-    public static double[] toTotalSalesPerTerm(double[] sales1, double[] sales2,
-                                                double[] sales3, double[] sales4,
-                                               double[] sales5, double[] sales6 ) {
-        // Checks if the sizes of the passed arrays are the same
+        int numberOfDivisions = salesData.length;
+        int numberOfTerms = salesData[numberOfDivisions -1].length;
 
-        // Assume the sizes of all the passed arrays are the same
-        double[] totalSalesPerTerm = new double[sales1.length];
-        for (int i=0; i<sales1.length; i++) {
-            totalSalesPerTerm[i] = sales1[i] + sales2[i] + sales3[i] + sales4[i] + sales5[i] +sales6[i] ;
+        double[] totalThroughTerms = new double[numberOfTerms];
+
+        // Outer loop for each term
+        for (int term=0; term < numberOfTerms; term++) {
+
+            // Loop through division to sum up
+            double totalOfTerm = 0;
+            for (int div=0; div < numberOfDivisions; div++) {
+                totalOfTerm += salesData[div][term];
+            }
+            // Store total for this term
+            totalThroughTerms[term] = totalOfTerm;
         }
-        return totalSalesPerTerm;
+        return totalThroughTerms;
     }
 
 
@@ -160,25 +178,6 @@ public class Main {
     }
 
 
-    /**
-     * This function construct sales data for provided number of divisions and terms.
-     * By prompting user to input sales data for specified number of term,
-     * this function populate sales data for one division.
-     * @param divisions
-     * @param terms
-     * @return
-     */
-    public static double[][] constructSalesData(String[] divisions, int terms) {
-        Scanner in = new Scanner(System.in);
-        double[][] salesData = new double[divisions.length][terms];
-        for (int div=0; div<divisions.length; div++) {
-            for (int term=0; term<terms; term++) {
-                System.out.printf("Division %d sales for Term %d? ", div, term);
-                salesData[div][term] = in.nextDouble();
-            }
-        }
-        return salesData;
-    }
 
 
 
