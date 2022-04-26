@@ -4,50 +4,56 @@ public class Main {
 
     // Defines constants
     private static final int NUMBER_OF_DIVISION = 2;
-    private static final int NUMBER_OF_TERMS_PER_YEAR = 4;
+    private static final int NUMBER_OF_TERMS_PER_YEAR = 6;
 
     public static void main(String[] args) {
 
         // Collects divisions' names
         String[] namesOfDivisions = new String[NUMBER_OF_DIVISION];
-        getNames( namesOfDivisions, NUMBER_OF_DIVISION );
+        getNames(namesOfDivisions, NUMBER_OF_DIVISION);
 
         // Constructs sales data
         double[][] salesData = constructSalesData(namesOfDivisions, NUMBER_OF_TERMS_PER_YEAR);
-        // Prints sales data
-//        for(int i=0; i<NUMBER_OF_DIVISION; i++) {
-//            for (int j=0; j<NUMBER_OF_TERMS_PER_YEAR; j++) {
-//                System.out.println("Division " + i + " Term" + j + ": " + salesData[i][j]);
-//            }
-//        }
 
         // Calculates the differences between terms for each division
-        double[][] diffsPerDivision = new double[NUMBER_OF_DIVISION][NUMBER_OF_TERMS_PER_YEAR -1];
-        for (int div =0; div<NUMBER_OF_DIVISION; div++) {
+        double[][] diffsPerDivision = new double[NUMBER_OF_DIVISION][NUMBER_OF_TERMS_PER_YEAR - 1];
+        for (int div = 0; div < NUMBER_OF_DIVISION; div++) {
             diffsPerDivision[div] = calculateDiffsBetweenTerms(salesData[div]);
         }
+
         // Calculates the differences between terms for company
-        double[] totalForCompany = calculateTotalsPerTerm(salesData);
-        double[] diffsForCompany = calculateDiffsBetweenTerms(totalForCompany);
-//        // Prints the differences
-//        System.out.println("\n");
-//        for (int i=0; i<NUMBER_OF_TERMS_PER_YEAR -1; i++) {
-//            for (int j=0; j<NUMBER_OF_DIVISION; j++) {
-//                System.out.println("Division " + j + " Term " + (i+1) + "compared to the previous: " + diffsPerDivision[j][i]);
-//            }
-//            System.out.println("For the whole company, Term " + (i+1) + "compared to the previous: " + diffsForCompany[i]);
-//        }
+        double[] totals = calculateTotalsPerTerm(salesData);
+        double[] diffsForCompany = calculateDiffsBetweenTerms(totals);
 
         // Calculates the averages of each term
         double[] averagesPerTerm = calculateAveragesOfTerm(salesData);
-//        // Prints the averages
-//        System.out.println("\n");
-//        for (int i= 0; i<NUMBER_OF_TERMS_PER_YEAR; i++) {
-//            System.out.println("Average of Term " + i + ": " + averagesPerTerm[i]);
-//        }
 
-        int[] highestSalesPerTerm = getNamesWithHighestSale(salesData);
+        // Prints in form of table
+        int[] highestSalesPerTerm = getHighestSales(salesData);
+        printHeaderLine();
+        printContents(namesOfDivisions, salesData, diffsPerDivision);
+        printTotalRow (totals, diffsForCompany);
+        printAverageRow (averagesPerTerm);
+        printHighestDivisionRow (namesOfDivisions, highestSalesPerTerm);
     }
+
+
+    /**
+     * This void function takes two parameters.
+     * And prompts user to enter names for times specified by the second arg.
+     * @param array
+     * @param time
+     */
+    public static void getNames(String[] array, int time) {
+
+        // Prompts user to enter names of each division of company
+        Scanner in = new Scanner(System.in);
+        for (int i = 0; i < time; i++) {
+            System.out.printf("Type name %d: ", i + 1);
+            array[i] = in.nextLine();
+        }
+    }
+
     /**
      * This function construct sales data for provided number of divisions and terms.
      * By prompting user to input sales data for specified number of term,
@@ -66,22 +72,6 @@ public class Main {
             }
         }
         return salesData;
-    }
-
-    /**
-     * This void function takes two parameters.
-     * And prompts user to enter names for times specified by the second arg.
-     * @param array
-     * @param time
-     */
-    public static void getNames(String[] array, int time) {
-
-        // Prompts user to enter names of each division of company
-        Scanner in = new Scanner(System.in);
-        for (int i = 0; i < time; i++) {
-            System.out.printf("Type name %d: ", i + 1);
-            array[i] = in.nextLine();
-        }
     }
 
     /**
@@ -111,7 +101,7 @@ public class Main {
 
         // Determines the numbers of divisions and terms
         int numberOfDivisions = salesData.length;
-        int numberOfTerms = salesData[numberOfDivisions].length;
+        int numberOfTerms = salesData[0].length;
 
         // Define returned variable
         double[] totalsPerTerm = new double[numberOfTerms];
@@ -121,7 +111,7 @@ public class Main {
 
             // Loop through divisions to sum up
             double totalOfTerm = 0;
-            for (int div=0; div < numberOfDivisions -1; div++) {
+            for (int div=0; div < numberOfDivisions; div++) {
                 totalOfTerm += salesData[div][term];
             }
             // Store total for this term
@@ -140,7 +130,7 @@ public class Main {
 
         // Determines the numbers of divisions and terms
         int numberOfDivisions = salesData.length;
-        int numberOfTerms = salesData[numberOfDivisions].length;
+        int numberOfTerms = salesData[0].length;
 
         // Calls calculateTotalsPerTerm to get totals
         double[] totalsPerTerm = calculateTotalsPerTerm(salesData);
@@ -150,7 +140,7 @@ public class Main {
 
         // Loop through all terms
         for (int term=0; term<numberOfTerms; term++) {
-            averagesOfTerm[term] = totalsPerTerm[term] / numberOfDivisions -1;
+            averagesOfTerm[term] = totalsPerTerm[term] / numberOfDivisions;
         }
         return averagesOfTerm;
     }
@@ -161,11 +151,11 @@ public class Main {
      * @param salesData
      * @return
      */
-    public static int[] getNamesWithHighestSale(double[][] salesData) {
+    public static int[] getHighestSales(double[][] salesData) {
 
         // Determines the numbers of divisions and terms
         int numberOfDivisions = salesData.length;
-        int numberOfTerms = salesData[numberOfDivisions].length;
+        int numberOfTerms = salesData[0].length;
 
         // Define returned variable
         int[] divisions = new int[numberOfTerms];
@@ -186,12 +176,10 @@ public class Main {
         return divisions;
     }
 
-
     /**
      * This function prints header for the table.
      */
     public static void printHeaderLine() {
-        // Loop for printing header line
         // Prints  1st column
         System.out.printf("%20s%16s", "Division", "Term1");
 
@@ -210,16 +198,16 @@ public class Main {
 
     /**
      * This function prints contents for the table.
-     * @param namesOfDivision
+     * @param namesOfDivisions
      * @param salesData
-     * @param diffsPerTerm
+     * @param diffsPerDivision
      */
-    public static void printContents(String[] namesOfDivision, double[][] salesData, double[][] diffsPerTerm) {
+    public static void printContents(String[] namesOfDivisions, double[][] salesData, double[][] diffsPerDivision) {
         // Loop for printing the contents
         for (int div = 0; div < NUMBER_OF_DIVISION; div++) {
 
             // Prints division name
-            System.out.printf("%20s", namesOfDivision[div]);
+            System.out.printf("%20s", namesOfDivisions[div]);
 
             // Prints the first term
             System.out.printf("%,16.2f", salesData[div][0]);
@@ -227,7 +215,7 @@ public class Main {
             // Prints the second term and over
             for (int term = 1; term < NUMBER_OF_TERMS_PER_YEAR; term++) {
                 System.out.printf("%,16.2f", salesData[div][term]);
-                System.out.printf("(%+,14.2f)", diffsPerTerm[div][term - 1]);
+                System.out.printf("%+,14.2f", diffsPerDivision[div][term - 1]);
             }
             System.out.printf("\n");
         }
@@ -248,7 +236,7 @@ public class Main {
         // Prints the second term and over
         for (int term = 1; term < NUMBER_OF_TERMS_PER_YEAR; term++) {
             System.out.printf("%,16.2f", totals[term]);
-            System.out.printf("(%+,14.2f)", diffs[term - 1]);
+            System.out.printf("%+,14.2f", diffs[term - 1]);
         }
             System.out.printf("\n");
     }
@@ -267,26 +255,29 @@ public class Main {
         // Prints the second term and over
         for (int term = 1; term < NUMBER_OF_TERMS_PER_YEAR; term++) {
             System.out.printf("%,16.2f", averages[term]);
-            System.out.printf("(%16s)", "");
+            System.out.printf("%14s", "");
         }
         System.out.printf("\n");
     }
 
-
-
-
-
-
-
-
     /**
-     * This void function prints Strings passed by arg.
-     * Each value in the array of String passed are printed with preceding number of line.
-     * @param names
+     * This function prints the row of divisions with the highest sales in each term.
+     * @param namesOfDivisions
+     * @param highest
      */
-    public static void printNames(String[] names) {
-        for (int i = 0; i < names.length; i++) {
-            System.out.printf("%d: %20s\n", i +1, names[i]);
+    public static void printHighestDivisionRow(String[] namesOfDivisions, int[] highest) {
+        // Prints first column
+        System.out.printf("%20s", "Highest");
+
+        // Prints the first term
+        System.out.printf("%16s", namesOfDivisions[ (highest[0]) ]);
+
+        // Prints the second term and over
+        for (int term = 1; term < NUMBER_OF_TERMS_PER_YEAR; term++) {
+            System.out.printf("%16s", namesOfDivisions[ (highest[term]) ]);
+            System.out.printf("%14s", "");
         }
+        System.out.printf("\n");
     }
+
 }
