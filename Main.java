@@ -136,6 +136,13 @@ public class Main {
     }
 
 
+    /**
+     * This function return average sales per each term.
+     * At this moment, implementation is done for 2 parameters version and 6 parameters.
+     * @param sales1
+     * @param sales2
+     * @return
+     */
     public static double[] calculateAveragePerTerm(double[] sales1, double[] sales2) {
         // Checks if the sizes of the passed arrays are the same
 
@@ -144,12 +151,25 @@ public class Main {
         for (int i=0; i<sales1.length; i++) {
             double total = 0;
             total += sales1[i] + sales2[i];
-            averageSalesPerTerm[i] = total / 2;
+            averageSalesPerTerm[i] = total / sales1.length;
         }
         return averageSalesPerTerm;
-
-
     }
+    public static double[] calculateAveragePerTerm(double[] sales1, double[] sales2,
+                                                   double[] sales3, double[] sales4,
+                                                   double[] sales5, double[] sales6) {
+        // Checks if the sizes of the passed arrays are the same
+
+        // Assume the sizes of all the passed arrays are the same
+        double[] averageSalesPerTerm = new double[sales1.length];
+        for (int i=0; i<sales1.length; i++) {
+            double total = 0;
+            total += sales1[i] + sales2[i] + sales3[i] + sales4[i] + sales5[i] + sales6[i];
+            averageSalesPerTerm[i] = total / sales1.length;
+        }
+        return averageSalesPerTerm;
+    }
+
 
 
 
