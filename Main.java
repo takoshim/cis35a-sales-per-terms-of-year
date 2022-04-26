@@ -22,17 +22,23 @@ public class Main {
         double[] dev2SalesDiffsBetweenTerms = calculateDiffsBetweenTerms(dev2Sales);
 
         double companySalesPerTerm[] = toTotalSalesPerTerm( dev1Sales, dev2Sales );
-        for (int i=0; i<4; i++) {
-            System.out.println(companySalesPerTerm[i]);
+        System.out.println("\n");
+        for (int i=0; i< dev1Sales.length; i++) {
+            System.out.println(i + "total: " + companySalesPerTerm[i]);
         }
 
         double[] companySalesDiffsBetweenTerms = calculateDiffsBetweenTerms(companySalesPerTerm);
         System.out.println("\n");
-        for (int i=0; i<3; i++) {
-            System.out.println(companySalesDiffsBetweenTerms[i]);
+        for (int i=0; i< dev1Sales.length -1; i++) {
+            System.out.println(i + "diff: " + companySalesDiffsBetweenTerms[i]);
         }
 
-//        double[][] userDiffsBetweenTerms = calcDiffBetweenTerms(userQuarterlySalesPerDivision);
+        double[] dev1SalesAveragePerTerm = calculateAveragePerTerm(dev1Sales, dev2Sales);
+        System.out.println("\n");
+        for (int i=0; i< dev1Sales.length; i++) {
+            System.out.println(i + "average: " + dev1SalesAveragePerTerm[i]);
+        }
+
 //        printHeaderLine();
 //        printContents(userNamesOfDivision, userQuarterlySalesPerDivision, userDiffsBetweenTerms);
     }
@@ -99,6 +105,13 @@ public class Main {
         return diffsAmongTerms;
     }
 
+    /**
+     * This function returns total sales for each term.
+     * At this moment, implementation is done for 2 parameters version and 6 parameters.
+     * @param sales1
+     * @param sales2
+     * @return
+     */
     public static double[] toTotalSalesPerTerm(double[] sales1, double[] sales2) {
         // Checks if the sizes of the passed arrays are the same
 
@@ -109,6 +122,39 @@ public class Main {
         }
         return totalSalesPerTerm;
     }
+    public static double[] toTotalSalesPerTerm(double[] sales1, double[] sales2,
+                                                double[] sales3, double[] sales4,
+                                               double[] sales5, double[] sales6 ) {
+        // Checks if the sizes of the passed arrays are the same
+
+        // Assume the sizes of all the passed arrays are the same
+        double[] totalSalesPerTerm = new double[sales1.length];
+        for (int i=0; i<sales1.length; i++) {
+            totalSalesPerTerm[i] = sales1[i] + sales2[i] + sales3[i] + sales4[i] + sales5[i] +sales6[i] ;
+        }
+        return totalSalesPerTerm;
+    }
+
+
+    public static double[] calculateAveragePerTerm(double[] sales1, double[] sales2) {
+        // Checks if the sizes of the passed arrays are the same
+
+        // Assume the sizes of all the passed arrays are the same
+        double[] averageSalesPerTerm = new double[sales1.length];
+        for (int i=0; i<sales1.length; i++) {
+            double total = 0;
+            total += sales1[i] + sales2[i];
+            averageSalesPerTerm[i] = total / 2;
+        }
+        return averageSalesPerTerm;
+
+
+    }
+
+
+
+
+
     public static void printHeaderLine() {
         // Loop for printing header line
         // Print "Division" at 1st column
