@@ -8,40 +8,30 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String[] userDivisions = new String[NUMBER_OF_DIVISION];
-        getNamesInTime( userDivisions, NUMBER_OF_DIVISION );
-        printNames( userDivisions );
+        String[] namesOfDivisions = new String[NUMBER_OF_DIVISION];
+        getNamesInTime( namesOfDivisions, NUMBER_OF_DIVISION );
+        printNames( namesOfDivisions );
 
-        double[] dev1Sales = new double[NUMBER_OF_TERMS_PER_YEAR];
-        getSalesInTerm( dev1Sales, NUMBER_OF_TERMS_PER_YEAR);
+        // double[] salesOfDev1 = new double[NUMBER_OF_TERMS_PER_YEAR];
+        // getSalesInTerm( salesOfDev1, NUMBER_OF_TERMS_PER_YEAR);
+        // double[] salesOfDev2 = new double[NUMBER_OF_TERMS_PER_YEAR];
+        // getSalesInTerm( salesOfDev2, NUMBER_OF_TERMS_PER_YEAR);
 
-        double[] dev2Sales = new double[NUMBER_OF_TERMS_PER_YEAR];
-        getSalesInTerm( dev2Sales, NUMBER_OF_TERMS_PER_YEAR);
+        double[][] salesData = constructSalesData(namesOfDivisions, NUMBER_OF_TERMS_PER_YEAR);
 
-        double[] dev1SalesDiffsBetweenTerms = calculateDiffsBetweenTerms(dev1Sales);
-        double[] dev2SalesDiffsBetweenTerms = calculateDiffsBetweenTerms(dev2Sales);
-
-        double companySalesPerTerm[] = toTotalSalesPerTerm( dev1Sales, dev2Sales );
-        System.out.println("\n");
-        for (int i=0; i< dev1Sales.length; i++) {
-            System.out.println(i + "total: " + companySalesPerTerm[i]);
+        for(int i=0; i<NUMBER_OF_DIVISION; i++) {
+            for (int j=0; j<NUMBER_OF_TERMS_PER_YEAR; j++) {
+                System.out.println("Division " + i + " Term" + j + ": " + salesData[i][j]);
+            }
         }
 
-        double[] companySalesDiffsBetweenTerms = calculateDiffsBetweenTerms(companySalesPerTerm);
-        System.out.println("\n");
-        for (int i=0; i< dev1Sales.length -1; i++) {
-            System.out.println(i + "diff: " + companySalesDiffsBetweenTerms[i]);
-        }
-
-        double[] dev1SalesAveragePerTerm = calculateAveragePerTerm(dev1Sales, dev2Sales);
-        System.out.println("\n");
-        for (int i=0; i< dev1Sales.length; i++) {
-            System.out.println(i + "average: " + dev1SalesAveragePerTerm[i]);
-        }
-
-//        printHeaderLine();
-//        printContents(userNamesOfDivision, userQuarterlySalesPerDivision, userDiffsBetweenTerms);
     }
+
+
+
+//        printHeaderLine()
+//        printContents(userNamesOfDivision, userQuarterlySalesPerDivision, userDiffsBetweenTerms);
+
 
     /**
      * This void function takes two parameters.
@@ -82,7 +72,6 @@ public class Main {
         Scanner in = new Scanner(System.in);
 
         for (int i=0; i< terms; i++) {
-            System.out.printf("Sales for Term %d?\n", i +1);
             sales[i] = in.nextDouble();
         }
     }
@@ -170,6 +159,26 @@ public class Main {
         return averageSalesPerTerm;
     }
 
+
+    /**
+     * This function construct sales data for provided number of divisions and terms.
+     * By prompting user to input sales data for specified number of term,
+     * this function populate sales data for one division.
+     * @param divisions
+     * @param terms
+     * @return
+     */
+    public static double[][] constructSalesData(String[] divisions, int terms) {
+        Scanner in = new Scanner(System.in);
+        double[][] salesData = new double[divisions.length][terms];
+        for (int div=0; div<divisions.length; div++) {
+            for (int term=0; term<terms; term++) {
+                System.out.printf("Division %d sales for Term %d? ", div, term);
+                salesData[div][term] = in.nextDouble();
+            }
+        }
+        return salesData;
+    }
 
 
 
