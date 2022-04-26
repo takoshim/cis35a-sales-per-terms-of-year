@@ -29,9 +29,8 @@ public class Main {
             diffsPerDivision[div] = calculateDiffsBetweenTerms(salesData[div]);
         }
         // Calculates the differences between terms for company
-        double[] totalForCompany = calculateTotalThroughDivs(salesData);
+        double[] totalForCompany = calculateTotalsPerTerm(salesData);
         double[] diffsForCompany = calculateDiffsBetweenTerms(totalForCompany);
-
         // Prints the differences
         System.out.println("\n");
         for (int i=0; i<NUMBER_OF_TERMS_PER_YEAR -1; i++) {
@@ -41,10 +40,14 @@ public class Main {
             System.out.println("For the whole company, Term " + (i+1) + "compared to the previous: " + diffsForCompany[i]);
         }
 
-
+        // Calculates the averages of each term
+        double[] averagesPerTerm = calculateAveragesOfTerm(salesData);
+        // Prints the averages
+        System.out.println("\n");
+        for (int i= 0; i<NUMBER_OF_TERMS_PER_YEAR; i++) {
+            System.out.println("Average of Term " + i + ": " + averagesPerTerm[i]);
+        }
     }
-
-
 //        printHeaderLine()
 //        printContents(userNamesOfDivision, userQuarterlySalesPerDivision, userDiffsBetweenTerms);
 
@@ -121,12 +124,12 @@ public class Main {
      * @param salesData
      * @return
      */
-    public static double[] calculateTotalThroughDivs(double[][] salesData) {
+    public static double[] calculateTotalsPerTerm(double[][] salesData) {
 
         int numberOfDivisions = salesData.length;
         int numberOfTerms = salesData[numberOfDivisions -1].length;
 
-        double[] totalThroughTerms = new double[numberOfTerms];
+        double[] totalsPerTerms = new double[numberOfTerms];
 
         // Outer loop for each term
         for (int term=0; term < numberOfTerms; term++) {
@@ -137,52 +140,36 @@ public class Main {
                 totalOfTerm += salesData[div][term];
             }
             // Store total for this term
-            totalThroughTerms[term] = totalOfTerm;
+            totalsPerTerms[term] = totalOfTerm;
         }
-        return totalThroughTerms;
+        return totalsPerTerms;
     }
 
 
     /**
-     * This function return average sales per each term.
-     * At this moment, implementation is done for 2 parameters version and 6 parameters.
-     * @param sales1
-     * @param sales2
+     * This function returns averages sales per term.
+     * This function calls function calculateTotalsPerTerm(salesData).
+     * @param salesData
      * @return
      */
-    public static double[] calculateAveragePerTerm(double[] sales1, double[] sales2) {
-        // Checks if the sizes of the passed arrays are the same
+    public static double[] calculateAveragesOfTerm(double[][] salesData) {
 
-        // Assume the sizes of all the passed arrays are the same
-        double[] averageSalesPerTerm = new double[sales1.length];
-        for (int i=0; i<sales1.length; i++) {
-            double total = 0;
-            total += sales1[i] + sales2[i];
-            averageSalesPerTerm[i] = total / sales1.length;
-        }
-        return averageSalesPerTerm;
-    }
-    public static double[] calculateAveragePerTerm(double[] sales1, double[] sales2,
-                                                   double[] sales3, double[] sales4,
-                                                   double[] sales5, double[] sales6) {
-        // Checks if the sizes of the passed arrays are the same
+        int numberOfDivisions = salesData.length;
+        int numberOfTerms = salesData[numberOfDivisions -1].length;
 
-        // Assume the sizes of all the passed arrays are the same
-        double[] averageSalesPerTerm = new double[sales1.length];
-        for (int i=0; i<sales1.length; i++) {
-            double total = 0;
-            total += sales1[i] + sales2[i] + sales3[i] + sales4[i] + sales5[i] + sales6[i];
-            averageSalesPerTerm[i] = total / sales1.length;
+        double[] totalsPerTerm = calculateTotalsPerTerm(salesData);
+        double[] averagesOfTerm = new double[numberOfTerms];
+
+        for (int term=0; term<numberOfTerms; term++) {
+            averagesOfTerm[term] = totalsPerTerm[term] / numberOfDivisions;
         }
-        return averageSalesPerTerm;
+        return averagesOfTerm;
     }
 
 
-
-
-
-
-
+    /**
+     *
+     */
     public static void printHeaderLine() {
         // Loop for printing header line
         // Print "Division" at 1st column
