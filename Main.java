@@ -1,3 +1,15 @@
+
+//public static void getNames(String[] names, int numberOfTimes) {
+//public static double[][] constructSalesData(String[] divisions, int terms) {
+//public static double[] calculateDiffsBetweenTerms(double[] sales){
+//public static double[] calculateTotalsPerTerm(double[][] salesData) {
+//public static double[] calculateAveragesOfTerm(double[][] salesData) {
+//public static int[] getHighestSales(double[][] salesData) {
+//public static void printHeaderLine(double[][] salesData) {
+//public static void printContents(String[] namesOfDivisions, double[][] salesData, double[][] diffsPerDivision) {
+//public static void printTotalRow(double[] totals, double[] diffs) {
+//public static void printAverageRow(double[] averages) {
+//public static void printHighestDivisionRow(String[] namesOfDivisions, int[] highest) {
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -82,9 +94,13 @@ public class Main {
             // Inner loop for each term
             for (int term=0; term<terms; term++) {
                 do {
-                    System.out.printf("Division %d sales for Term %d? ", div, term+1);
+                    System.out.printf("Division %s sales for Term %d? ", divisions[div], term+1);
                     try {
                         salesData[div][term] = in.nextDouble();
+                        if (salesData[div][term] <0) {
+                            System.out.println("Negative value is not acceptable.");
+                            continue;
+                        }
                         break;
                     } catch (InputMismatchException e) {
                         System.out.println("That's not a number.");
