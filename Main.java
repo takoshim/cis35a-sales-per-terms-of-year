@@ -4,7 +4,7 @@ public class Main {
 
     // Defines constants
     private static final int NUMBER_OF_DIVISION = 2;
-    private static final int NUMBER_OF_TERMS_PER_YEAR = 6;
+    private static final int NUMBER_OF_TERMS_PER_YEAR = 2;
 
     public static void main(String[] args) {
 
@@ -43,16 +43,21 @@ public class Main {
     /**
      * This void function takes two parameters.
      * And prompts user to enter names for times specified by the second arg.
-     * @param array
-     * @param time
+     * @param names
+     * @param numberOfTimes
      */
-    public static void getNames(String[] array, int time) {
+    public static void getNames(String[] names, int numberOfTimes) {
 
         // Prompts user to enter names of each division of company
         Scanner in = new Scanner(System.in);
-        for (int i = 0; i < time; i++) {
-            System.out.printf("Type name %d: ", i + 1);
-            array[i] = in.nextLine();
+        for (int i = 0; i < numberOfTimes; i++) {
+            do {
+                System.out.printf("Type name %d: ", i + 1);
+                names[i] = in.nextLine();
+                if (names[i].length() >15) {
+                    System.out.println("Too long.");
+                }
+            } while (names[i].length() >15);
         }
     }
 
@@ -281,7 +286,7 @@ public class Main {
         // Prints the second term and over
         for (int term = 1; term < numberOfTerms; term++) {
             System.out.printf("%,16.2f", averages[term]);
-            System.out.printf("%14s", "");
+            System.out.printf("%14s", "-");
         }
         System.out.printf("\n");
     }
@@ -305,7 +310,7 @@ public class Main {
         // Prints the second term and over
         for (int term = 1; term < numberOfTerms; term++) {
             System.out.printf("%16s", namesOfDivisions[ (highest[term]) ]);
-            System.out.printf("%14s", "");
+            System.out.printf("%14s", "-");
         }
         System.out.printf("\n");
     }
