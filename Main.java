@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -80,8 +81,16 @@ public class Main {
 
             // Inner loop for each term
             for (int term=0; term<terms; term++) {
-                System.out.printf("Division %d sales for Term %d? ", div, term);
-                salesData[div][term] = in.nextDouble();
+                do {
+                    System.out.printf("Division %d sales for Term %d? ", div, term+1);
+                    try {
+                        salesData[div][term] = in.nextDouble();
+                        break;
+                    } catch (InputMismatchException e) {
+                        System.out.println("That's not a number.");
+                        in.nextLine();
+                    }
+                } while (true);
             }
         }
         return salesData;
