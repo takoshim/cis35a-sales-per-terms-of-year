@@ -1,23 +1,53 @@
+/*********************************
+ * Your Name: Takeo Shimazu
+ * Class and Section: Sp22 CIS D036A 01Y, 64Z Java Programming
+ * Assignment Number: 2a Part 3
+ * Due Date: Apr 28, 2022
+ * Date Submitted: Apr 27, 2022
+ **********************************
+ *
+ * Design ********************
+ *
+ * variables
+ *  NUMBER_OF_DIVISION (int) is used in main method as constant to specify the number of divisions
+ *  NUMBER_OF_TERMS_PER_YEAR (int) is used in main method as constant to specify the number of fiscal terms per year (set 4 if quarter system)
+ *  namesOfDivisions (String[]) is used to store names of divisions
+ *  salesData (double[][]) is used to store sales. First dimension is for divisions, the second is for sales.
+ *  diffsPerDivision (double[]) is used to store the differences between terms for A SINGLE DIVISION.
+ *  diffsForCompany (double[]) is used to store the differences between terms for whole company.
+ *  totals (double[]) is used to store the total sales summed up throughout divisions per each term.
+ *  averagesPerTerm (double[]) is used to store the average sales per each term.
+ *  highestSalesDivsPerTerm (int[]) is used to store the indices for divisions that marks the highest sales in a term.
+ *
+ * Input
+ *  These two methods are meant to prompt user to input data.
+ *  public static void getNames(String[] names, int numberOfTimes)
+ *  public static double[][] getSalesData(String[] divisions, int terms)
+ *
+ * Processing
+ *  These four methods are meant to process data.
+ *  public static double[] calculateDiffsBetweenTerms(double[] sales){
+ *  public static double[] calculateTotalsPerTerm(double[][] salesData) {
+ *  public static double[] calculateAveragesOfTerm(double[][] salesData) {
+ *  public static int[] getHighestSales(double[][] salesData) {
+ *
+ * Printing
+ *  These five methods are meant to print parts of the output table.
+ *  public static void printHeaderLine(double[][] salesData) {
+ *  public static void printContents(String[] namesOfDivisions, double[][] salesData, double[][] diffsPerDivision) {
+ *  public static void printTotalRow(double[] totals, double[] diffs) {
+ *  public static void printAverageRow(double[] averages) {
+ *  public static void printHighestDivisionRow(String[] namesOfDivisions, int[] highest) {
+ *******************************/
 
-//public static void getNames(String[] names, int numberOfTimes) {
-//public static double[][] constructSalesData(String[] divisions, int terms) {
-//public static double[] calculateDiffsBetweenTerms(double[] sales){
-//public static double[] calculateTotalsPerTerm(double[][] salesData) {
-//public static double[] calculateAveragesOfTerm(double[][] salesData) {
-//public static int[] getHighestSales(double[][] salesData) {
-//public static void printHeaderLine(double[][] salesData) {
-//public static void printContents(String[] namesOfDivisions, double[][] salesData, double[][] diffsPerDivision) {
-//public static void printTotalRow(double[] totals, double[] diffs) {
-//public static void printAverageRow(double[] averages) {
-//public static void printHighestDivisionRow(String[] namesOfDivisions, int[] highest) {
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
 
     // Defines constants
-    private static final int NUMBER_OF_DIVISION = 2;
-    private static final int NUMBER_OF_TERMS_PER_YEAR = 2;
+    private static final int NUMBER_OF_DIVISION = 6;
+    private static final int NUMBER_OF_TERMS_PER_YEAR = 4;
 
     public static void main(String[] args) {
 
@@ -26,7 +56,7 @@ public class Main {
         getNames(namesOfDivisions, NUMBER_OF_DIVISION);
 
         // Constructs sales data
-        double[][] salesData = constructSalesData(namesOfDivisions, NUMBER_OF_TERMS_PER_YEAR);
+        double[][] salesData = getSalesData(namesOfDivisions, NUMBER_OF_TERMS_PER_YEAR);
 
         // Calculates the differences between terms for each division
         double[][] diffsPerDivision = new double[NUMBER_OF_DIVISION][NUMBER_OF_TERMS_PER_YEAR - 1];
@@ -42,14 +72,14 @@ public class Main {
         double[] averagesPerTerm = calculateAveragesOfTerm(salesData);
 
         // Get the indices of divisions with the highest sales
-        int[] highestSalesPerTerm = getHighestSales(salesData);
+        int[] highestSalesDivsPerTerm = getHighestSales(salesData);
 
         // Prints in form of table
         printHeaderLine(salesData);
         printContents(namesOfDivisions, salesData, diffsPerDivision);
         printTotalRow (totals, diffsForCompany);
         printAverageRow (averagesPerTerm);
-        printHighestDivisionRow (namesOfDivisions, highestSalesPerTerm);
+        printHighestDivisionRow (namesOfDivisions, highestSalesDivsPerTerm);
     }
 
 
@@ -82,7 +112,7 @@ public class Main {
      * @param terms
      * @return
      */
-    public static double[][] constructSalesData(String[] divisions, int terms) {
+    public static double[][] getSalesData(String[] divisions, int terms) {
         Scanner in = new Scanner(System.in);
 
         // Define returned variable
